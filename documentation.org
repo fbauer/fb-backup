@@ -25,14 +25,15 @@
 
 #+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
 digraph {
- RUNNING -> SNAPSHOT;
+ INIT_HIBERNATE [label="INIT_HIBERNATE\nentry / emit sigusr2\nexit / wait 5s"];
+ RUNNING -> SNAPSHOT [label="snapshot_threshold |\nsigusr2"];
  SNAPSHOT -> RUNNING;
- STOPPED -> RUNNING;
- RUNNING -> STOPPED;
- RUNNING -> WAIT;
- SNAPSHOT -> WAIT;
- WAIT -> HIBERNATE;
- HIBERNATE -> RUNNING;
+ STOPPED -> RUNNING [label="(ana)cron |\nsys_startup |\nmanual_startup"];
+ RUNNING -> STOPPED [label="bw_limit |\nsys_shutdown"];
+ RUNNING -> INIT_HIBERNATE [label="sys_hibernate"];
+ SNAPSHOT -> INIT_HIBERNATE [label="sys_hibernate"];
+ INIT_HIBERNATE -> HIBERNATE;
+ HIBERNATE -> RUNNING [label="sys_resume"];
 }
 #+END_SRC
 
