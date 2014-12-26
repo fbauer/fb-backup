@@ -1,6 +1,42 @@
 * My backup approach
 
-Backup is based on tarsnap.
+  My backup solution is based on tarsnap. The idea is to start the
+  tarsnap client each day via (anacron). As my uplink is pretty slow
+  (DSL) and sometimes flaky, a snapshot is created every 300MB (the
+  tarsnap documentation recommends 1GB as minimum size).
+
+  There are other items that the backup wrapper will try to take care
+  of:
+
+  - Handle loss of network connection gracefully
+  - Start tarsnap once a day, if no session is already running
+  - Stop or suspend the tarsnap process if the network connection changes from
+    wlan to UMTS, as my UMTS bandwith / day is limited and expensive
+  - Stop or suspend the tarsnap process when running on laptop battery
+  - Start or resume the tarsnap process when an external power supply
+    is connected
+  - Start or resume the tarsnap process when back on wlan or lan connection
+  - Insert a snapshot before going to hibernate / shutting down the
+    computer
+  - To prevent runaway tarsnap sessions to waste all bandwith, limit
+    the bandwith per session
+
+** System state machine
+
+#+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
+digraph {
+ RUNNING -> SNAPSHOT;
+ SNAPSHOT -> RUNNING;
+ STOPPED -> RUNNING;
+ RUNNING -> STOPPED;
+ RUNNING -> WAIT;
+ SNAPSHOT -> WAIT;
+ WAIT -> HIBERNATE;
+ HIBERNATE -> RUNNING;
+}
+#+END_SRC
+
+#+RESULTS:
 
 ** Useful Commands
 *** List all archives
