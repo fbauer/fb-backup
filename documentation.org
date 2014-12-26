@@ -1,0 +1,47 @@
+* My backup approach
+
+Backup is based on tarsnap.
+
+** Useful Commands
+*** List all archives
+
+#+begin_src sh
+  sudo tarsnap --keyfile /root/tarsnap.key --list-archives
+#+end_src
+
+*** Create 2GB backup archive
+
+#+begin_src sh
+  sudo tarsnap -c -f "mybackup-$(date +%Y%m%d%H%M%S)" --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key  -v -X tarsnap-excludes.txt --print-stats --maxbw 2G --checkpoint-bytes 300000000 /home/flo/
+#+end_src
+
+*** Create backup 
+
+#+begin_src sh
+  sudo tarsnap -c -f "mybackup-$(date +%Y%m%d%H%M%S)" --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key  -v -X tarsnap-excludes.txt --print-stats --maxbw 2G --checkpoint-bytes 300000000 /home/flo/ 
+#+end_src
+
+*** Recover last archive (usually automatic on next archive creation)
+
+#+begin_src sh
+  sudo tarsnap --recover -f mybackup-20141208 --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key 
+#+end_src
+
+*** Print current operation on stderr
+
+#+begin_src sh
+  sudo kill -s SIGUSR1 $(pidof tarsnap)
+#+end_src
+
+*** generate checkpoint
+
+#+begin_src sh
+  sudo kill -s SIGUSR2 $(pidof tarsnap)
+#+end_src
+
+
+*** Check backup size using du and considering tarsnap-excludes.txt
+
+#+begin_src sh
+  du -X /home/flo/tarsnap-excludes.txt --max-depth=1  /home/flo | sort -n
+#+end_src
