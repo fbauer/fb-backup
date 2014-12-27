@@ -1,3 +1,6 @@
+#+BIND: org-export-publishing-directory "doc"
+#+PROPERTY: dir doc
+
 * My backup approach
 
   My backup solution is based on tarsnap. The idea is to start the
