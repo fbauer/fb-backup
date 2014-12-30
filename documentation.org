@@ -91,3 +91,19 @@ digraph {
 #+begin_src sh
   sudo kill -s SIGQUIT $(pidof tarsnap) && while pidof tarsnap ; do sleep 5 ; done
 #+end_src
+
+*** Check whether power supply is battery or AC adapter
+
+#+begin_src sh
+  upower -i $(upower -e | grep 'AC') | grep "online"
+#+end_src
+
+returns onlie: no if the computer is running on battery.
+http://askubuntu.com/questions/69556/how-to-check-battery-status-using-terminal
+
+*** Check the network connection
+http://askubuntu.com/questions/361532/how-to-find-available-wireless-networks?rq=1
+http://askubuntu.com/questions/117065/how-do-i-find-out-the-name-of-the-ssid-im-connected-to-from-the-command-line
+http://askubuntu.com/questions/405508/how-to-find-name-of-currently-active-network-interface
+*** Execute script on shutdown
+http://askubuntu.com/questions/416299/execute-command-before-shutdown-reboot
