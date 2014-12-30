@@ -85,3 +85,9 @@ digraph {
 #+begin_src sh
   du -X /home/flo/tarsnap-excludes.txt --max-depth=1  /home/flo | sort -n
 #+end_src
+
+*** Quit, create snapshot and wait for completion
+
+#+begin_src sh
+  sudo kill -s SIGQUIT $(pidof tarsnap) && while pidof tarsnap ; do sleep 5 ; done
+#+end_src
