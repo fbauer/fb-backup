@@ -24,6 +24,8 @@
   - To prevent runaway tarsnap sessions to waste all bandwith, limit
     the bandwith per session
 
+** First running version
+   Copy the backup script to /etc/cron.daily and make it executable.
 ** System state machine
 
 #+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
@@ -52,7 +54,7 @@ digraph {
 *** Create 2GB backup archive
 
 #+begin_src sh
-  sudo tarsnap -c -f "mybackup-$(date +%Y%m%d%H%M%S)" --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key  -v -X tarsnap-excludes.txt --print-stats --maxbw 2G --checkpoint-bytes 300000000 /home/flo/
+  sudo tarsnap -c -f "mybackup-$(date +%Y%m%d%H%M%S)" --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key  -v -X tarsnap-excludes.txt --print-stats  --checkpoint-bytes 300000000 /home/flo/
 #+end_src
 
 *** Create backup 
@@ -107,3 +109,5 @@ http://askubuntu.com/questions/117065/how-do-i-find-out-the-name-of-the-ssid-im-
 http://askubuntu.com/questions/405508/how-to-find-name-of-currently-active-network-interface
 *** Execute script on shutdown
 http://askubuntu.com/questions/416299/execute-command-before-shutdown-reboot
+*** Run script on change of network connection
+http://ubuntuforums.org/showthread.php?t=1083549
