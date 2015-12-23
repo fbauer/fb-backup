@@ -1,0 +1,2 @@
+#!/bin/sh
+tarsnap --print-stats --cachedir /home/flo/.tarsnap-cache --keyfile /root/tarsnap.key 

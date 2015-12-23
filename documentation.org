@@ -25,7 +25,38 @@
     the bandwith per session
 
 ** First running version
-   Copy the backup script to /etc/cron.daily and make it executable.
+   Copy the backup script to /etc/cron.daily and make it executable. 
+** Deleting old backups
+   Run 
+
+#+begin_src sh
+  sudo ./list-archives
+#+end_src
+
+   It creates a file called archives.txt and opens it in emacs. Delete
+   the backups that you want to _keep_ and save the file.
+   Round-robin seems sensible: 
+
+   - keep a daily backup for the current month (do nothing)
+   - keep a weekly backup for the previous month
+     (delete ever 7th archive name)
+   - keep one monthly backup for the last 12 months
+     (delete the first archive name for each month to keep it)
+
+   Then, call the delete-archives script like this:
+
+#+begin_src sh
+  cat archives.txt | sudo ./delete-archives
+#+end_src
+
+   Watch progress in another terminal by using watch:
+
+#+begin_src sh
+  watch -n 300 -d sudo ./print-stats
+#+end_src
+
+   
+
 ** System state machine
 
 #+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
@@ -110,4 +141,4 @@ http://askubuntu.com/questions/405508/how-to-find-name-of-currently-active-netwo
 *** Execute script on shutdown
 http://askubuntu.com/questions/416299/execute-command-before-shutdown-reboot
 *** Run script on change of network connection
-http://ubuntuforums.org/showthread.php?t=1083549
+    http://ubuntuforums.org/showthread.php?t=1083549

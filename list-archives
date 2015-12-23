@@ -1,0 +1,5 @@
+#!/bin/sh
+tarsnap  --list-archives  --keyfile /root/tarsnap.key | sort -r >> archives.txt
+emacs archives.txt &
+
+   

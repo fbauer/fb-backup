@@ -1,0 +1,1 @@
+while read archive ; do tarsnap -d --keyfile /root/tarsnap.key  --cachedir /home/flo/.tarsnap-cache -f $archive ; done
