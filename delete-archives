@@ -1,1 +1,1 @@
-sed -e 's/^/-f /g' | xargs tarsnap -d --keyfile /root/tarsnap.key  --cachedir /home/flo/.tarsnap-cache
+sed -e 's/^\(..*\)$/-f \1/g' | xargs tarsnap -d --keyfile /root/tarsnap.key  --cachedir /home/flo/.tarsnap-cache
