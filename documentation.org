@@ -37,7 +37,7 @@
    the backups that you want to _keep_ and save the file.
    Round-robin seems sensible: 
 
-   - keep a daily backup for the current month (do nothing)
+   - keep a daily backup for the current month (delete all archive names)
    - keep a weekly backup for the previous month
      (delete ever 7th archive name)
    - keep one monthly backup for the last 12 months
