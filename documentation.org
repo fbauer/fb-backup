@@ -56,25 +56,6 @@
 #+end_src
 
    
-
-** System state machine
-
-#+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
-digraph {
- INIT_HIBERNATE [label="INIT_HIBERNATE\nentry / emit sigusr2\nexit / wait 5s"];
- RUNNING -> SNAPSHOT [label="snapshot_threshold |\nsigusr2"];
- SNAPSHOT -> RUNNING;
- STOPPED -> RUNNING [label="(ana)cron |\nsys_startup |\nmanual_startup"];
- RUNNING -> STOPPED [label="bw_limit |\nsys_shutdown"];
- RUNNING -> INIT_HIBERNATE [label="sys_hibernate"];
- SNAPSHOT -> INIT_HIBERNATE [label="sys_hibernate"];
- INIT_HIBERNATE -> HIBERNATE;
- HIBERNATE -> RUNNING [label="sys_resume"];
-}
-#+END_SRC
-
-#+RESULTS:
-
 ** Useful Commands
 *** List all archives
 
@@ -125,13 +106,38 @@ digraph {
   sudo kill -s SIGQUIT $(pidof tarsnap) && while pidof tarsnap ; do sleep 5 ; done
 #+end_src
 
+
+** Never implemented system architecture
+
+Some sketches for a more featureful solution. In practice I found a
+humble cronjob to be sufficient.
+
+*** System state machine
+
+#+BEGIN_SRC dot :file images/state-machine-dot.png :exports results
+digraph {
+ INIT_HIBERNATE [label="INIT_HIBERNATE\nentry / emit sigusr2\nexit / wait 5s"];
+ RUNNING -> SNAPSHOT [label="snapshot_threshold |\nsigusr2"];
+ SNAPSHOT -> RUNNING;
+ STOPPED -> RUNNING [label="(ana)cron |\nsys_startup |\nmanual_startup"];
+ RUNNING -> STOPPED [label="bw_limit |\nsys_shutdown"];
+ RUNNING -> INIT_HIBERNATE [label="sys_hibernate"];
+ SNAPSHOT -> INIT_HIBERNATE [label="sys_hibernate"];
+ INIT_HIBERNATE -> HIBERNATE;
+ HIBERNATE -> RUNNING [label="sys_resume"];
+}
+#+END_SRC
+
+#+RESULTS:
+
+
 *** Check whether power supply is battery or AC adapter
 
 #+begin_src sh
   upower -i $(upower -e | grep 'AC') | grep "online"
 #+end_src
 
-returns onlie: no if the computer is running on battery.
+returns online: no if the computer is running on battery.
 http://askubuntu.com/questions/69556/how-to-check-battery-status-using-terminal
 
 *** Check the network connection
@@ -142,3 +148,5 @@ http://askubuntu.com/questions/405508/how-to-find-name-of-currently-active-netwo
 http://askubuntu.com/questions/416299/execute-command-before-shutdown-reboot
 *** Run script on change of network connection
     http://ubuntuforums.org/showthread.php?t=1083549
+
+
